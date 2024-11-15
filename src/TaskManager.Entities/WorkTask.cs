@@ -5,7 +5,7 @@ namespace TaskManager.Entities
     public class WorkTask : BaseItem
     {
         public string Description { get; set; }
-        public DateTime? CompletedDateTimeUTC { get; set; }
+        public DateTime? PlannedDateTimeUTC { get; set; }
         public DateTime? ClosedDateTimeUTC { get; set; }
         public TimeSpan? FactedTimeSpan { get; set; }
 

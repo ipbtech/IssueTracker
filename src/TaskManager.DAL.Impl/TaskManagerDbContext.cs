@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using TaskManager.Entities;
 
 namespace TaskManager.DAL.Impl
@@ -22,6 +23,8 @@ namespace TaskManager.DAL.Impl
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             builder.Entity<User>().Property(user => user.DisplayName).HasMaxLength(150).IsRequired();
             builder.Entity<WorkTaskStatus>().Property(user => user.Name).HasMaxLength(150).IsRequired();
             builder.Entity<WorkTask>().Property(user => user.Name).HasMaxLength(150).IsRequired();

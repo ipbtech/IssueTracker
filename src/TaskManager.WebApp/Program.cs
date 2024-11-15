@@ -1,27 +1,48 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using TaskManager.DAL.Impl;
+using TaskManager.Entities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+var connString = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContextPool<TaskManagerDbContext>(opt => opt.UseSqlite(connString));
+
+builder.Services.AddIdentity<User, IdentityRole<int>>(opt => { })
+    .AddEntityFrameworkStores<TaskManagerDbContext>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/account/login";
+});
+
+
+
+
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    var dbContext = scope.ServiceProvider.GetRequiredService<TaskManagerDbContext>();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
 
+//app.UseExceptionHandler("/Home/Error");
+app.UseHsts();
+app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=home}/{action=index}/{id?}");
 
 app.Run();

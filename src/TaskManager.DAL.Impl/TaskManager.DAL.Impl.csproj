@@ -14,4 +14,10 @@
     <ProjectReference Include="..\TaskManager.Entities\TaskManager.Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="db\TaskManagerDb.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
