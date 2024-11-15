@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManager.DAL.Impl\TaskManager.DAL.Impl.csproj" />
+    <ProjectReference Include="..\TaskManager.ViewModels\TaskManager.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>
