@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.DAL.Contracts;
 using TaskManager.DAL.Impl;
+using TaskManager.DAL.Impl.Repositories;
 using TaskManager.Entities;
 using TaskManager.WebApp.Mapping;
 
@@ -27,6 +29,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddAutoMapper(opt => opt.AddProfile<MappingProfile>());
+builder.Services.AddScoped<IWorkTaskRepository, WorkTaskRepository>();
+builder.Services.AddScoped<IRepository<WorkTaskStatus>, WorkTaskStatusesRepository>();
+builder.Services.AddScoped<IRepository<WorkTaskComment>, WorkTaskCommentRepository>();
 
 
 

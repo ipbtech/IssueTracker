@@ -1,8 +1,6 @@
-﻿using TaskManager.Entities.Base;
-
-namespace TaskManager.Entities
+﻿namespace TaskManager.Entities
 {
-    public class WorkTask : BaseItem
+    public class WorkTask : BaseItemNamed
     {
         public string Description { get; set; }
         public DateTime? PlannedDateTimeUTC { get; set; }

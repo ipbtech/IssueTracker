@@ -1,8 +1,6 @@
-﻿using TaskManager.Entities.Base;
-
-namespace TaskManager.Entities
+﻿namespace TaskManager.Entities
 {
-    public class WorkTaskStatus : BaseItem
+    public class WorkTaskStatus : BaseItemNamed
     {
         public ICollection<WorkTask> Tasks { get; set; } = [];
     }

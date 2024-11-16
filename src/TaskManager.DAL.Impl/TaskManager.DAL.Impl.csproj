@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TaskManager.DAL.Contracts\TaskManager.DAL.Contracts.csproj" />
     <ProjectReference Include="..\TaskManager.Entities\TaskManager.Entities.csproj" />
   </ItemGroup>
 
