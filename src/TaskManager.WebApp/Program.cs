@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.DAL.Impl;
 using TaskManager.Entities;
+using TaskManager.WebApp.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,14 +12,21 @@ builder.Services.AddControllersWithViews();
 var connString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContextPool<TaskManagerDbContext>(opt => opt.UseSqlite(connString));
 
-builder.Services.AddIdentity<User, IdentityRole<int>>(opt => { })
+builder.Services.AddIdentity<User, IdentityRole<int>>(opt => 
+{
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.Password.RequiredLength = 4;
+    opt.Password.RequireUppercase = false;
+    opt.Password.RequireLowercase = false;
+    opt.Password.RequireDigit = false;
+})
     .AddEntityFrameworkStores<TaskManagerDbContext>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/account/login";
 });
 
-
+builder.Services.AddAutoMapper(opt => opt.AddProfile<MappingProfile>());
 
 
 

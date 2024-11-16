@@ -8,13 +8,13 @@ namespace TaskManager.ViewModels.Account
         public string Name { get; set; }
 
         [Required]
-        [RegularExpression("^[a-zA-Z0-9\\!@#$%^&*()_+\\-=\\[\\]{};':]", ErrorMessage = "Только буквы латинского алфавита, цифры и спецсимволы")]
         public string Login { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Required]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароли должны совпадать")]
         public string ConfirmPassword { get; set; }

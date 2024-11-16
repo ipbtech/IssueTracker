@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using TaskManager.Entities
+@inject SignInManager<User> signInManager;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,19 +14,31 @@
     <header>
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">TaskManager</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">TaskManagerMinimal</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" style="flex-direction:row-reverse">
                     <ul class="navbar-nav" style="align-items:flex-end">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Вход</a>
-                        </li>
+                        @if(!signInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Вход</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
+                            </li>   
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <p class="nav-link text-dark" style="margin-bottom:0px;">You are logged as @User?.Identity?.Name</p>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Выйти</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
