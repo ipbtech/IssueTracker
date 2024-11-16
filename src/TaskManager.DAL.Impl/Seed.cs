@@ -8,10 +8,11 @@ namespace TaskManager.DAL.Impl
 {
     public static class Seed
     {
-        private static Random _bogusRandom = new Random(123);
         public static void Fill(this ModelBuilder modelBuilder)
         {
             Randomizer.Seed = new Random(123);
+            int fakeUsersCount = 7;
+            int fakeTasksCount = 77;
             var passwordHasher = new PasswordHasher<User>();
 
             #region fake users
@@ -25,7 +26,7 @@ namespace TaskManager.DAL.Impl
                 .RuleFor(u => u.UpdatedDateTimeUTC, f => DateTime.UtcNow)
                 .RuleFor(u => u.SecurityStamp, f => Guid.NewGuid().ToString())
                 .RuleFor(u => u.ConcurrencyStamp, f => Guid.NewGuid().ToString());
-            var fakeUsers = fakeUserRules.Generate(7);
+            var fakeUsers = fakeUserRules.Generate(fakeUsersCount);
             fakeUsers.ForEach(user => user.PasswordHash = passwordHasher.HashPassword(user, "12345"));
             modelBuilder.Entity<User>().HasData(fakeUsers);
             #endregion
@@ -63,18 +64,25 @@ namespace TaskManager.DAL.Impl
             };
             modelBuilder.Entity<WorkTaskStatus>().HasData(statuses);
             #endregion
+            #region  fake tasks
+            var taskIds = 1;
+            var fakeTaskRules = new Faker<WorkTask>()
+                .RuleFor(t => t.Id, f => taskIds++)
+                .RuleFor(t => t.Name, f => string.Join(" ", f.Lorem.Words(3)))
+                .RuleFor(t => t.Description, f => f.Lorem.Sentences(5))
+                .RuleFor(t => t.CreatedDateTimeUTC, f => f.Date.Between(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow))
+                .RuleFor(t => t.UpdatedDateTimeUTC, f => f.Date.Between(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow))
+                .RuleFor(t => t.ClosedDateTimeUTC, f => f.Date.Between(DateTime.UtcNow.AddDays(-3), DateTime.UtcNow).OrNull(f, (float)0.3))
+                .RuleFor(t => t.PlannedDateTimeUTC, f => f.Date.Between(DateTime.UtcNow.AddDays(-3), DateTime.UtcNow).OrNull(f, (float)0.3))
+                .RuleFor(t => t.FactedTimeSpan, f => f.Date.Timespan(new TimeSpan(24, 0, 0)).OrNull(f, (float)0.3))
+                .RuleFor(t => t.UserId, f => f.Random.Int(1, fakeUsersCount))
+                .RuleFor(t => t.StatusId, (f, t) =>
+                    t.ClosedDateTimeUTC is not null && t.ClosedDateTimeUTC <= DateTime.UtcNow ? 4 : f.Random.Int(1, 3));
+            var fakeTasks = fakeTaskRules.Generate(fakeTasksCount);
+            modelBuilder.Entity<WorkTask>().HasData(fakeTasks);
+            #endregion
 
 
-
-        }
-
-
-        private static IEnumerable<User> GenerateFakeUsers()
-        {
-            
-            
-            
-            return new List<User>();
         }
     }
 }
