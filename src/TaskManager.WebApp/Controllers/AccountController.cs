@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Entities;
-using TaskManager.ViewModels.Account;
+using TaskManager.ViewModels;
 
 namespace TaskManager.WebApp.Controllers
 {
@@ -46,6 +46,7 @@ namespace TaskManager.WebApp.Controllers
                     var result = await _userManager.CreateAsync(user, viewModel.Password);
                     if (result.Succeeded)
                     {
+                        _logger.LogInformation("User with Id:{@UserId} is created", user.Id);
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return RedirectToAction("Index", "Home");
                     }

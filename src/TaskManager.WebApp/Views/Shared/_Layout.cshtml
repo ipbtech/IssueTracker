@@ -24,10 +24,10 @@
                         @if(!signInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Вход</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Log in</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Sign up</a>
                             </li>   
                         }
                         else
@@ -36,7 +36,7 @@
                                 <p class="nav-link text-dark" style="margin-bottom:0px;">You are logged as @User?.Identity?.Name</p>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Выйти</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Log out</a>
                             </li>
                         }
                     </ul>

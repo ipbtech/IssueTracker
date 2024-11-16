@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TaskManager.ViewModels.Account
+namespace TaskManager.ViewModels
 {
     public class RegisterVM
     {

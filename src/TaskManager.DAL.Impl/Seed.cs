@@ -37,28 +37,28 @@ namespace TaskManager.DAL.Impl
                 new WorkTaskStatus
                 {
                     Id = 1,
-                    Name = "Создана",
+                    Name = "Created",
                     CreatedDateTimeUTC = DateTime.UtcNow,
                     UpdatedDateTimeUTC = DateTime.UtcNow,
                 },
                 new WorkTaskStatus
                 {
                     Id = 2,
-                    Name = "В работе",
+                    Name = "In progress",
                     CreatedDateTimeUTC = DateTime.UtcNow,
                     UpdatedDateTimeUTC = DateTime.UtcNow,
                 },
                 new WorkTaskStatus
                 {
                     Id = 3,
-                    Name = "Пауза",
+                    Name = "Pause",
                     CreatedDateTimeUTC = DateTime.UtcNow,
                     UpdatedDateTimeUTC = DateTime.UtcNow,
                 },
                 new WorkTaskStatus
                 {
                     Id = 4,
-                    Name = "Завершена",
+                    Name = "Done",
                     CreatedDateTimeUTC = DateTime.UtcNow,
                     UpdatedDateTimeUTC = DateTime.UtcNow,
                 },

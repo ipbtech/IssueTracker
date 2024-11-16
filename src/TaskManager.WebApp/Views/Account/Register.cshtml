@@ -1,36 +1,39 @@
 ﻿@model RegisterVM
 @{
-    ViewData["Title"] = "Регистрация";
+    ViewData["Title"] = "Sign up";
 }
 
 
 <div class="center-form">
-    <h1 style="text-align:center">Регистрация</h1>
+    <h1 style="text-align:center">Sign up</h1>
     <div class="row">
         <div class="col-md-12">
             <form method="post">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Login">Логин</label>
+                    <label asp-for="Login">UserName</label>
                     <input asp-for="Login" class="form-control" />
                     @* <span asp-validation-for="Login" class="text-danger"></span> *@
                 </div>
                 <div class="form-group">
-                    <label asp-for="Name">ФИО</label>
+                    <label asp-for="Name">Full Name</label>
                     <input asp-for="Name" class="form-control" />
                     @* <span asp-validation-for="Name" class="text-danger"></span> *@
                 </div>
                 <div class="form-group">
-                    <label asp-for="Password">Пароль</label>
+                    <label asp-for="Password">Password</label>
                     <input asp-for="Password" class="form-control" />
                     @* <span asp-validation-for="Password" class="text-danger"></span> *@
                 </div>
                 <div class="form-group">
-                    <label asp-for="ConfirmPassword">Пароль еще раз</label>
+                    <label asp-for="ConfirmPassword">One more time password</label>
                     <input asp-for="ConfirmPassword" class="form-control" />
                     @* <span asp-validation-for="ConfirmPassword" class="text-danger"></span> *@
                 </div>
-                <button type="submit" class="btn btn-primary">Регистрация</button>
+                <div style="display:flex; flex-direction:column; align-items:flex-start">
+                    <a style="margin-bottom:15px" asp-controller="Account" asp-action="Login">Already have account? Let's log in</a>
+                    <button type="submit" class="btn btn-primary">Sign up</button>
+                </div>
             </form>
         </div>
     </div>
