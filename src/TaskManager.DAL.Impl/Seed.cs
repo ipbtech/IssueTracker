@@ -13,12 +13,13 @@ namespace TaskManager.DAL.Impl
             Randomizer.Seed = new Random(123);
             int fakeUsersCount = 7;
             int fakeTasksCount = 77;
+            int fakeCommentsCount = 88;
             var passwordHasher = new PasswordHasher<User>();
 
             #region fake users
-            var userIds = 1;
+            var userIdsIncrement = 1;
             var fakeUserRules = new Faker<User>()
-                .RuleFor(u => u.Id, f => userIds++)
+                .RuleFor(u => u.Id, f => userIdsIncrement++)
                 .RuleFor(u => u.UserName, f => f.Internet.UserName(f.Name.FirstName(Name.Gender.Male), f.Name.LastName(Name.Gender.Male)))
                 .RuleFor(u => u.NormalizedUserName, (f, u) => u?.UserName?.ToUpper())
                 .RuleFor(u => u.DisplayName, f => string.Join(" ", f.Name.FirstName(Name.Gender.Male), f.Name.LastName(Name.Gender.Male)))
@@ -65,9 +66,9 @@ namespace TaskManager.DAL.Impl
             modelBuilder.Entity<WorkTaskStatus>().HasData(statuses);
             #endregion
             #region  fake tasks
-            var taskIds = 1;
+            var taskIdsIncrement = 1;
             var fakeTaskRules = new Faker<WorkTask>()
-                .RuleFor(t => t.Id, f => taskIds++)
+                .RuleFor(t => t.Id, f => taskIdsIncrement++)
                 .RuleFor(t => t.Name, f => string.Join(" ", f.Lorem.Words(3)))
                 .RuleFor(t => t.Description, f => f.Lorem.Sentences(5))
                 .RuleFor(t => t.CreatedDateTimeUTC, f => f.Date.Between(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow))
@@ -81,8 +82,18 @@ namespace TaskManager.DAL.Impl
             var fakeTasks = fakeTaskRules.Generate(fakeTasksCount);
             modelBuilder.Entity<WorkTask>().HasData(fakeTasks);
             #endregion
-
-
+            #region fake comments
+            var commentIdsIncrement = 1;
+            var fakeCommentRules = new Faker<WorkTaskComment>()
+                .RuleFor(t => t.Id, f => commentIdsIncrement++)
+                .RuleFor(t => t.Content, f => f.Lorem.Sentences(5))
+                .RuleFor(t => t.CreatedDateTimeUTC, f => f.Date.Between(DateTime.UtcNow.AddDays(-6), DateTime.UtcNow))
+                .RuleFor(t => t.UpdatedDateTimeUTC, f => f.Date.Between(DateTime.UtcNow.AddDays(-6), DateTime.UtcNow))
+                .RuleFor(t => t.UserId, f => f.Random.Int(1, fakeUsersCount))
+                .RuleFor(t => t.TaskId, f => f.Random.Int(1, fakeTasksCount));
+            var fakeComments = fakeCommentRules.Generate(fakeCommentsCount);
+            modelBuilder.Entity<WorkTaskComment>().HasData(fakeComments);
+            #endregion
         }
     }
 }
