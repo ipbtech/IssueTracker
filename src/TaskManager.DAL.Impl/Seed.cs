@@ -9,14 +9,14 @@ namespace TaskManager.DAL.Impl
     public static class Seed
     {
         private static Random _bogusRandom = new Random(123);
-        public static void FillDbTestData(this ModelBuilder modelBuilder)
+        public static void Fill(this ModelBuilder modelBuilder)
         {
             Randomizer.Seed = new Random(123);
             var passwordHasher = new PasswordHasher<User>();
 
             #region fake users
             var userIds = 1;
-            var fakeUserRules = new Faker<User>().StrictMode(true)
+            var fakeUserRules = new Faker<User>()
                 .RuleFor(u => u.Id, f => userIds++)
                 .RuleFor(u => u.UserName, f => f.Internet.UserName(f.Name.FirstName(Name.Gender.Male), f.Name.LastName(Name.Gender.Male)))
                 .RuleFor(u => u.NormalizedUserName, (f, u) => u?.UserName?.ToUpper())

@@ -42,6 +42,8 @@ namespace TaskManager.DAL.Impl
             builder.Entity<WorkTaskComment>().HasOne(prop => prop.User).WithMany(prop => prop.Comments)
                 .HasPrincipalKey(user => user.Id).HasForeignKey(com => com.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            Seed.Fill(builder);
         }
     }
 }
