@@ -35,6 +35,14 @@ namespace TaskManager.WebApp.Mapping
                     opt.MapFrom(src => src.PlannedDateTimeUTC.HasValue ? src.PlannedDateTimeUTC.Value.ToShortDateString() : "Not assigned"))
                 .ForMember(dto => dto.FactedTimeSpan, opt =>
                     opt.MapFrom(src => src.FactedTimeSpan.HasValue ? src.FactedTimeSpan.Value.TotalHours.ToString("0.00") : "Not assigned"));
+
+            CreateMap<WorkTaskCreateVM, WorkTask>()
+                .ForMember(task => task.Name, opt => opt.MapFrom(dto => dto.Title))
+                .ForMember(task => task.ClosedDateTimeUTC, opt => opt.Ignore())
+                .ForMember(task => task.PlannedDateTimeUTC, opt =>
+                    opt.MapFrom(dto => dto.PlannedDateTime.HasValue ? dto.PlannedDateTime.Value.ToUniversalTime() : new Nullable<DateTime>()))
+                .ForMember(task => task.FactedTimeSpan, opt =>
+                    opt.MapFrom(dto => dto.FactedTimeSpan.HasValue ? TimeSpan.FromHours((double)dto.FactedTimeSpan) : new Nullable<TimeSpan>()));
         }
     }
 }

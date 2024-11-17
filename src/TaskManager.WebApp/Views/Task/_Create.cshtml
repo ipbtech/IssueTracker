@@ -1,0 +1,27 @@
+﻿@model WorkTaskCreateVM
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="create-task-form" method="post" hx-post="/task/create" hx-target="#create-task-content">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <p style="color:limegreen; margin-bottom:15px;">@TempData["CreatedTaskNotification"]</p>
+            <div class="form-group">
+                <label asp-for="Title">Title:</label>
+                <input asp-for="Title" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="PlannedDateTime">Planned complete:</label>
+                <input type="datetime-local" asp-for="PlannedDateTime" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="FactedTimeSpan">Planned work hours</label>
+                <input type="number" step="0.1" asp-for="FactedTimeSpan" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+</div>

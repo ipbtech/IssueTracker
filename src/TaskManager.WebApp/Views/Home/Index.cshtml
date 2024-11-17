@@ -8,7 +8,8 @@
 </div>
 <div class="table-responsive-sm">
     <div style="display:flex; flex-direction:row-reverse">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                hx-get="/task/create" hx-swap="innerHTML" hx-target="#create-task-content">
             Create task
         </button>
     </div>
@@ -69,11 +70,12 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Create task</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                @await Html.PartialAsync("_CreateTask");
+            <div id="create-task-content" class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Create</button>
+                <button asp-controller="Task" asp-action="Create"
+                    type="submit" form="create-task-form" class="btn btn-primary">Create
+                </button>
             </div>
         </div>
     </div>
