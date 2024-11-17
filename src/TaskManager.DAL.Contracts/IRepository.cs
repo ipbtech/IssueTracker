@@ -10,6 +10,6 @@ namespace TaskManager.DAL.Contracts
         public Task DeleteAsync(T entity);
         public Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
         public Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
-        public Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperties);
+        public Task<T?> GetFirstAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
     }
 }

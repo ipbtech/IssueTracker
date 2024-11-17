@@ -10,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//if (builder.Environment.IsDevelopment())
+//    builder.Services.AddRazorPages()
+//        .AddRazorRuntimeCompilation();
+
 
 var connString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContextPool<TaskManagerDbContext>(opt => opt.UseSqlite(connString));
@@ -23,6 +27,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(opt =>
     opt.Password.RequireDigit = false;
 })
     .AddEntityFrameworkStores<TaskManagerDbContext>();
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/account/login";

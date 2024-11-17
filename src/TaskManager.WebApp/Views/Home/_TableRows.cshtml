@@ -1,0 +1,28 @@
+﻿@model IEnumerable<WorkTaskTableVM>
+
+@if(Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><a asp-controller="Task" asp-action="Index" asp-route-id="@item.Id">@item.Title</a></td>
+            <td>@item.Status</td>
+            <td>@item.Author</td>
+            <td>@item.CreatedDateTimeUTC</td>
+            <td>@item.ClosedDateTimeUTC</td>
+            <td>@item.FactedTimeSpan</td>
+        </tr>
+    }
+    <tr id="loading-frame">
+        <td></td>
+        <td></td>
+        <td style="display:flex; justify-content:center">
+            <button class="btn btn-primary" hx-get="/?page=@ViewData["NextPage"]" 
+                hx-push-url="true" hx-target="#loading-frame" hx-swap="outerHTML">Load More
+            </button>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+}

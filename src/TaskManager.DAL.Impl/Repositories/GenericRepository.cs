@@ -48,9 +48,10 @@ namespace TaskManager.DAL.Impl.Repositories
             return await query.Where(predicate).AsNoTracking().ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T?> GetFirstAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
-            return await dbSet.FindAsync(id);
+            IQueryable<T> query = Include(includeProperties);
+            return await query.FirstOrDefaultAsync(predicate);
         }
 
         private IQueryable<T> Include(params Expression<Func<T, object>>[] includeProperties)

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.DAL.Contracts;
+using TaskManager.ViewModels;
 
 namespace TaskManager.WebApp.Controllers
 {
@@ -20,9 +21,20 @@ namespace TaskManager.WebApp.Controllers
 
 
         [HttpGet]
-        public IActionResult Task(int id)
+        public async Task<IActionResult> Index(int id)
         {
-            return View();
+            try
+            {
+                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id,
+                    task => task.Status, task => task.User);
+                var viewModel = _mapper.Map<WorkTaskVM>(task);
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return View("Error");
+            }
         }
     }
 }

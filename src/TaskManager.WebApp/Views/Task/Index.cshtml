@@ -1,0 +1,22 @@
+﻿@model WorkTaskVM
+
+<div class="row" style="margin-top:90px">
+    <div class="col-sm-12 col-md-6">
+        <h1 style="margin-bottom:50px;">@Model.Title</h1>
+        <h5>Author:</h5>
+        <p>@Model.Author</p>
+        <h5>Status:</h5>
+        <p>@Model.Status.Name</p>
+        <h5>Created date:</h5>
+        <p>@Model.CreatedDateTimeUTC</p>
+        <h5>Closed date:</h5>
+        <p>@Model.ClosedDateTimeUTC</p>
+        <h5>Planned date:</h5>
+        <p>@Model.PlannedDateTimeUTC</p>
+        <h5>Facted work hours:</h5>
+        <p>@Model.FactedTimeSpan</p>
+    </div>
+    <div class="col-sm-12 col-md-6">
+
+    </div>
+</div>
