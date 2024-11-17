@@ -10,10 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-//if (builder.Environment.IsDevelopment())
-//    builder.Services.AddRazorPages()
-//        .AddRazorRuntimeCompilation();
-
 
 var connString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContextPool<TaskManagerDbContext>(opt => opt.UseSqlite(connString));

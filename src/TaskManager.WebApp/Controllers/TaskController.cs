@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.DAL.Contracts;
@@ -29,12 +30,16 @@ namespace TaskManager.WebApp.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index(int id)
         {
             try
             {
                 var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id,
                     task => task.Status, task => task.User);
+                if (task is null)
+                    throw new Exception($"Task with Id:{id} not found");
+
                 var viewModel = _mapper.Map<WorkTaskGetVM>(task);
                 return View(viewModel);
             }
@@ -47,6 +52,7 @@ namespace TaskManager.WebApp.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             var viewModel = new WorkTaskCreateVM();
@@ -54,6 +60,7 @@ namespace TaskManager.WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(WorkTaskCreateVM viewModel)
         {
@@ -76,6 +83,26 @@ namespace TaskManager.WebApp.Controllers
                     return RedirectToAction("Create");
                 }
                 return PartialView("_Create", viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return View("Error");
+            }
+        }
+
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id);
+                if (task is null)
+                    throw new Exception($"Task with Id:{id} not found");
+
+                await _workTaskRepository.DeleteAsync(task);
+                _logger.LogInformation("Task with Id:{@TaskId} was deleted", id);
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {

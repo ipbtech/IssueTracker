@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Entities;
@@ -28,6 +29,7 @@ namespace TaskManager.WebApp.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
@@ -35,6 +37,7 @@ namespace TaskManager.WebApp.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM viewModel)
         {
@@ -64,6 +67,7 @@ namespace TaskManager.WebApp.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
@@ -71,6 +75,7 @@ namespace TaskManager.WebApp.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginVM viewModel)
         {
@@ -114,7 +119,7 @@ namespace TaskManager.WebApp.Controllers
             }
         }
 
-
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
