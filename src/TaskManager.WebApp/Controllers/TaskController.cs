@@ -27,7 +27,7 @@ namespace TaskManager.WebApp.Controllers
             {
                 var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id,
                     task => task.Status, task => task.User);
-                var viewModel = _mapper.Map<WorkTaskVM>(task);
+                var viewModel = _mapper.Map<WorkTaskGetVM>(task);
                 return View(viewModel);
             }
             catch (Exception ex)

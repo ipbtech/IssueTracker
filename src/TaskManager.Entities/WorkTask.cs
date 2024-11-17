@@ -2,7 +2,7 @@
 {
     public class WorkTask : BaseItemNamed
     {
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public DateTime? PlannedDateTimeUTC { get; set; }
         public DateTime? ClosedDateTimeUTC { get; set; }
         public TimeSpan? FactedTimeSpan { get; set; }

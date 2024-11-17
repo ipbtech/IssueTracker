@@ -46,7 +46,7 @@ namespace TaskManager.WebApp.Controllers
                 page = page == 0 ? 1 : page;
                 ViewData["NextPage"] = page + 1;
                 var tasks = await _workTaskRepository.GetWorkTaskTableViewsAsync(LOADING_COUNT, page, sort);
-                var viewModels = _mapper.Map<IEnumerable<WorkTaskTableVM>>(tasks);
+                var viewModels = _mapper.Map<IEnumerable<WorkTaskTableGetVM>>(tasks);
 
                 if (Request.IsHtmx())
                     return PartialView("_TableRows", viewModels);
@@ -55,8 +55,8 @@ namespace TaskManager.WebApp.Controllers
                 var allUsers = await _userManager.Users.ToListAsync();
                 var allStatuses = await _statusesRepository.GetAllAsync();
 
-                ViewData["AllStatuses"] = _mapper.Map<IEnumerable<WorkTaskStatusVM>>(allStatuses);
-                ViewData["AllUsers"] = _mapper.Map<IEnumerable<UserVM>>(allUsers);
+                ViewData["AllStatuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(allStatuses);
+                ViewData["AllUsers"] = _mapper.Map<IEnumerable<UserGetVM>>(allUsers);
                 ViewData["UserDisplayName"] = currentUser.DisplayName;
                 return View(viewModels);
             }

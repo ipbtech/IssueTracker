@@ -1,6 +1,6 @@
 ﻿namespace TaskManager.ViewModels
 {
-    public class WorkTaskTableVM
+    public class WorkTaskTableGetVM
     {
         public int Id { get; set; }
         public string Title { get; set; }

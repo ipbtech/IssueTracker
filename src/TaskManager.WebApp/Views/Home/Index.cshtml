@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WorkTaskTableVM>
+﻿@model IEnumerable<WorkTaskTableGetVM>
 @{
     ViewData["Title"] = "Home";
 }
@@ -8,7 +8,9 @@
 </div>
 <div class="table-responsive-sm">
     <div style="display:flex; flex-direction:row-reverse">
-        <a class="btn btn-primary">Create task</a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Create task
+        </button>
     </div>
     <div style="margin-block: 15px; display:flex; flex-direction:row; justify-content:space-between; align-items:center">
         <div style="display:flex; flex-direction:row; align-items:center">
@@ -16,7 +18,7 @@
             <p style="margin-right:10px; margin-bottom: 0px;">By&nbsp;Username:</p>
             <select class="form-select" style="margin-right:20px;">
                 <option selected>Not</option>
-                @foreach (var user in ViewData["AllUsers"] as IEnumerable<UserVM>)
+                @foreach (var user in ViewData["AllUsers"] as IEnumerable<UserGetVM>)
                 {
                     <option value="@user.Id">@user.UserName</option>
                 }
@@ -24,7 +26,7 @@
             <p style="margin-right:10px; margin-bottom: 0px;">By&nbsp;Status:</p>
             <select class="form-select" style="margin-right:20px;">
                 <option selected>Not</option>
-                @foreach (var status in ViewData["AllStatuses"] as IEnumerable<WorkTaskStatusVM>)
+                @foreach (var status in ViewData["AllStatuses"] as IEnumerable<WorkTaskStatusGetVM>)
                 {
                     <option value="@status.Id">@status.Name</option>
                 }
@@ -57,6 +59,27 @@
         </tbody>
     </table>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create task</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_CreateTask");
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 @section Scripts {

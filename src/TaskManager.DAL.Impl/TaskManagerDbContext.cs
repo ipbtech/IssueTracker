@@ -27,6 +27,7 @@ namespace TaskManager.DAL.Impl
             builder.Entity<User>().Property(user => user.DisplayName).HasMaxLength(150).IsRequired();
             builder.Entity<WorkTaskStatus>().Property(user => user.Name).HasMaxLength(150).IsRequired();
             builder.Entity<WorkTask>().Property(user => user.Name).HasMaxLength(150).IsRequired();
+            builder.Entity<WorkTask>().Property(user => user.Description).HasMaxLength(255);
 
             builder.Entity<WorkTask>().HasOne(prop => prop.User).WithMany(prop => prop.Tasks)
                 .HasPrincipalKey(user => user.Id).HasForeignKey(task => task.UserId)
