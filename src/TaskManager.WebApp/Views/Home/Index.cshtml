@@ -4,11 +4,11 @@
 }
 
 <div style="margin-top:90px; margin-bottom: 40px;">
-    <h1>Welcome @ViewData["UserDisplayName"] to the TaskManager MinimalApp</h1>
+    <h1>Welcome @ViewData["CurrentUserName"] to the TaskManager MinimalApp</h1>
 </div>
 <div class="table-responsive-sm">
     <div style="display:flex; flex-direction:row-reverse">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"
                 hx-get="/task/create" hx-swap="innerHTML" hx-target="#create-task-content">
             Create task
         </button>
@@ -19,7 +19,7 @@
             <p style="margin-right:10px; margin-bottom: 0px;">By&nbsp;Username:</p>
             <select class="form-select" style="margin-right:20px;">
                 <option selected>Not</option>
-                @foreach (var user in ViewData["AllUsers"] as IEnumerable<UserGetVM>)
+                @foreach (var user in ViewData["Users"] as IEnumerable<UserGetVM>)
                 {
                     <option value="@user.Id">@user.UserName</option>
                 }
@@ -27,7 +27,7 @@
             <p style="margin-right:10px; margin-bottom: 0px;">By&nbsp;Status:</p>
             <select class="form-select" style="margin-right:20px;">
                 <option selected>Not</option>
-                @foreach (var status in ViewData["AllStatuses"] as IEnumerable<WorkTaskStatusGetVM>)
+                @foreach (var status in ViewData["Statuses"] as IEnumerable<WorkTaskStatusGetVM>)
                 {
                     <option value="@status.Id">@status.Name</option>
                 }
@@ -63,7 +63,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -73,7 +73,7 @@
             <div id="create-task-content" class="modal-body">
             </div>
             <div class="modal-footer">
-                <button asp-controller="Task" asp-action="Create"
+                <button asp-controller="task" asp-action="create"
                     type="submit" form="create-task-form" class="btn btn-primary">Create
                 </button>
             </div>

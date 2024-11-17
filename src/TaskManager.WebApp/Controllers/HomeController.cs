@@ -55,9 +55,9 @@ namespace TaskManager.WebApp.Controllers
                 var allUsers = await _userManager.Users.ToListAsync();
                 var allStatuses = await _statusesRepository.GetAllAsync();
 
-                ViewData["AllStatuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(allStatuses);
-                ViewData["AllUsers"] = _mapper.Map<IEnumerable<UserGetVM>>(allUsers);
-                ViewData["UserDisplayName"] = currentUser.DisplayName;
+                ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(allStatuses);
+                ViewData["Users"] = _mapper.Map<IEnumerable<UserGetVM>>(allUsers);
+                ViewData["CurrentUserName"] = currentUser.DisplayName;
                 return View(viewModels);
             }
             catch (Exception ex)

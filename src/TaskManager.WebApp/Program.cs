@@ -39,12 +39,6 @@ builder.Services.AddScoped<IRepository<WorkTaskComment>, WorkTaskCommentReposito
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<TaskManagerDbContext>();
-}
-
-
 //app.UseExceptionHandler("/Home/Error");
 app.UseHsts();
 app.UseHttpsRedirection();

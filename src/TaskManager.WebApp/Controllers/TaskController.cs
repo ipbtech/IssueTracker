@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 using TaskManager.DAL.Contracts;
 using TaskManager.Entities;
 using TaskManager.ViewModels;
@@ -31,11 +32,12 @@ namespace TaskManager.WebApp.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("task/{id}")]
         public async Task<IActionResult> Index(int id)
         {
             try
             {
-                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id,
+                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id, 
                     task => task.Status, task => task.User);
                 if (task is null)
                     throw new Exception($"Task with Id:{id} not found");
@@ -53,11 +55,13 @@ namespace TaskManager.WebApp.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("task/create")]
         public IActionResult Create()
         {
             var viewModel = new WorkTaskCreateVM();
             return PartialView("_Create", viewModel);
         }
+
 
         [HttpPost]
         [Authorize]
@@ -78,11 +82,12 @@ namespace TaskManager.WebApp.Controllers
                     task.UserId = currentUser.Id;
 
                     await _workTaskRepository.CreateAsync(task);
-                    TempData["CreatedTaskNotification"] = " • Task was created successful. One more time?";
                     _logger.LogInformation("Task with Id:{@TaskId} was created", task.Id);
-                    return RedirectToAction("Create");
+                    //TempData["CreatedTaskNotification"] = " • Task was created successful. One more time?";
+                    //return RedirectToAction("Create");
+                    return RedirectToAction("Index", "Home");
                 }
-                return PartialView("_Create", viewModel);
+                return PartialView("_Create", viewModel); //TODO
             }
             catch (Exception ex)
             {
@@ -92,6 +97,7 @@ namespace TaskManager.WebApp.Controllers
         }
 
 
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -103,6 +109,57 @@ namespace TaskManager.WebApp.Controllers
                 await _workTaskRepository.DeleteAsync(task);
                 _logger.LogInformation("Task with Id:{@TaskId} was deleted", id);
                 return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return View("Error");
+            }
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Update(int id)
+        {
+            try
+            {
+                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id);
+                if (task is null)
+                    throw new Exception($"Task with Id:{id} not found");
+
+                var statuses = await _workTaskStatusesRepository.GetAllAsync();
+                var viewModel = _mapper.Map<WorkTaskUpdateVM>(task);
+                ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);
+                return PartialView("_Update", viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return View("Error");
+            }
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(WorkTaskUpdateVM viewModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var task = await _workTaskRepository.GetFirstAsync(task => task.Id == viewModel.Id);
+                    _mapper.Map(viewModel, task);
+
+                    await _workTaskRepository.UpdateAsync(task);
+                    _logger.LogInformation("Task with Id:{@TaskId} was updated", task.Id);
+                    return RedirectToAction("Index", "Task", new { id = viewModel.Id });
+                }
+                //var statuses = await _workTaskStatusesRepository.GetAllAsync();
+                //ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);
+                return PartialView("_Update", viewModel); //TODO
             }
             catch (Exception ex)
             {

@@ -3,9 +3,12 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form id="create-task-form" method="post" hx-post="/task/create" hx-target="#create-task-content">
+        <form id="create-task-form" method="post">
+            @* hx-post="/task/update/@Model.Id" hx-target="#update-task-content" *@
+            @* htmx for returning form if it has problems with validation *@
+            @* //TODO will find another way *@
             <div asp-validation-summary="All" class="text-danger"></div>
-            <p style="color:limegreen; margin-bottom:15px;">@TempData["CreatedTaskNotification"]</p>
+            @* <p class="text-success" margin-bottom:15px;">@TempData["CreatedTaskNotification"]</p> *@
             <div class="form-group">
                 <label asp-for="Title">Title:</label>
                 <input asp-for="Title" class="form-control" />

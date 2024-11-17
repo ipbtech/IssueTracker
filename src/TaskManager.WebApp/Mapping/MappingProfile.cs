@@ -43,6 +43,21 @@ namespace TaskManager.WebApp.Mapping
                     opt.MapFrom(dto => dto.PlannedDateTime.HasValue ? dto.PlannedDateTime.Value.ToUniversalTime() : new Nullable<DateTime>()))
                 .ForMember(task => task.FactedTimeSpan, opt =>
                     opt.MapFrom(dto => dto.FactedTimeSpan.HasValue ? TimeSpan.FromHours((double)dto.FactedTimeSpan) : new Nullable<TimeSpan>()));
+
+            CreateMap<WorkTask, WorkTaskUpdateVM>()
+                .ForMember(dto => dto.Title, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dto => dto.PlannedDateTime, opt =>
+                    opt.MapFrom(src => src.PlannedDateTimeUTC.HasValue ? src.PlannedDateTimeUTC.Value.ToLocalTime() : new Nullable<DateTime>()))
+                .ForMember(dto => dto.FactedTimeSpan, opt =>
+                    opt.MapFrom(src => src.FactedTimeSpan.HasValue ? Math.Round(src.FactedTimeSpan.Value.TotalHours, 2) : new Nullable<double>()));
+            CreateMap<WorkTaskUpdateVM, WorkTask>()
+                .ForMember(task => task.Name, opt => opt.MapFrom(dto => dto.Title))
+                .ForMember(task => task.ClosedDateTimeUTC, opt => opt.UseDestinationValue())
+                .ForMember(task => task.CreatedDateTimeUTC, opt => opt.UseDestinationValue())
+                .ForMember(task => task.PlannedDateTimeUTC, opt =>
+                    opt.MapFrom(dto => dto.PlannedDateTime.HasValue ? dto.PlannedDateTime.Value.ToUniversalTime() : new Nullable<DateTime>()))
+                .ForMember(task => task.FactedTimeSpan, opt =>
+                    opt.MapFrom(dto => dto.FactedTimeSpan.HasValue ? TimeSpan.FromHours((double)dto.FactedTimeSpan) : new Nullable<TimeSpan>()));
         }
     }
 }

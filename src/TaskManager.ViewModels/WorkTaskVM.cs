@@ -30,4 +30,10 @@ namespace TaskManager.ViewModels
         public DateTime? PlannedDateTime { get; set; }
         public double? FactedTimeSpan { get; set; }
     }
+
+    public class WorkTaskUpdateVM : WorkTaskCreateVM
+    {
+        public int Id { get; set; }
+        public int StatusId { get; set; }
+    }
 }

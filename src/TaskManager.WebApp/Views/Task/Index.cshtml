@@ -15,10 +15,14 @@
         <p>@Model.PlannedDateTimeUTC</p>
         <h5>Facted work hours:</h5>
         <p>@Model.FactedTimeSpan</p>
+        <h5>Description:</h5>
+        <p>@Model.Description</p>
         @if (User?.Identity?.Name == Model.Author)
         {
             <div style="display: flex; flex-direction: row">
-                <button style="margin-right:25px;" type="button" class="btn btn-primary">Update</button>
+                <button style="margin-right:20px;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal"
+                    hx-get="/task/update/@Model.Id" hx-swap="innerHTML" hx-target="#update-task-content">Update
+                </button>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
             </div>
         }
@@ -29,6 +33,26 @@
 </div>
 
 
+<!-- Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Update task</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="update-task-content" class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button asp-controller="task" asp-action="update"
+                        type="submit" form="update-task-form" class="btn btn-primary">
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -36,14 +60,26 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Delete task</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="submit" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="create-task-content" class="modal-body">
                 <p>Are you sure that you want to delete the task?</p>
             </div>
             <div class="modal-footer">
-                <a asp-controller="Task" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                <a asp-controller="task" asp-action="delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
             </div>
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("load", function () {
+            var modals = document.querySelectorAll("div.modal");
+            modals.forEach(function (modal) {
+                modal.classList.remove("show");
+            });
+        });
+    </script>
+}
