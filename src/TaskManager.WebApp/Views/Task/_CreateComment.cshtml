@@ -1,0 +1,21 @@
+﻿@model WorkTaskCommentCreateVM
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="add-comment-form" method="post">
+            @* hx-post="/task/update/@Model.Id" hx-target="#update-task-content" *@
+            @* htmx for returning form if it has problems with validation *@
+            @* //TODO will find another way *@
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label hidden asp-for="TaskId"></label>
+                <input hidden asp-for="TaskId" value="@Model.TaskId" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Content">Comment</label>
+                <textarea asp-for="Content" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+</div>

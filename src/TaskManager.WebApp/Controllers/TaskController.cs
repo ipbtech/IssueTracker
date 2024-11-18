@@ -13,17 +13,21 @@ namespace TaskManager.WebApp.Controllers
     {
         private readonly IWorkTaskRepository _workTaskRepository;
         private readonly IRepository<WorkTaskStatus> _workTaskStatusesRepository;
+        private readonly IRepository<WorkTaskComment> _workTaskCommentsRepository;
         private readonly UserManager<User> _userManager;
 
         private readonly IMapper _mapper;
         private readonly ILogger<HomeController> _logger;
 
 
-        public TaskController(IWorkTaskRepository workTaskRepository, IRepository<WorkTaskStatus> workTaskStatusesRepository,
+        public TaskController(IWorkTaskRepository workTaskRepository, 
+            IRepository<WorkTaskStatus> workTaskStatusesRepository, IRepository<WorkTaskComment> workTaskCommentsRepository,
             UserManager<User> userManager, ILogger<HomeController> logger, IMapper mapper)
         {
             _workTaskRepository = workTaskRepository;
             _workTaskStatusesRepository = workTaskStatusesRepository;
+            _workTaskCommentsRepository = workTaskCommentsRepository;
+
             _userManager = userManager;
             _mapper = mapper;
             _logger = logger;
@@ -42,6 +46,9 @@ namespace TaskManager.WebApp.Controllers
                 if (task is null)
                     throw new Exception($"Task with Id:{id} not found");
 
+                var comments = await _workTaskCommentsRepository.GetAsync(com => com.TaskId == id, com => com.User);
+                comments = comments.OrderByDescending(com => com.CreatedDateTimeUTC);
+                ViewData["Comments"] = _mapper.Map<IEnumerable<WorkTaskCommentGetVM>>(comments);
                 var viewModel = _mapper.Map<WorkTaskGetVM>(task);
                 return View(viewModel);
             }
@@ -156,6 +163,48 @@ namespace TaskManager.WebApp.Controllers
                     await _workTaskRepository.UpdateAsync(task);
                     _logger.LogInformation("Task with Id:{@TaskId} was updated", task.Id);
                     return RedirectToAction("Index", "Task", new { id = viewModel.Id });
+                }
+                //var statuses = await _workTaskStatusesRepository.GetAllAsync();
+                //ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);
+                return PartialView("_Update", viewModel); //TODO
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return View("Error");
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("task/comment/{taskId}")]
+        public IActionResult CreateComment(int taskId)
+        {
+            var viewModel = new WorkTaskCommentCreateVM();
+            viewModel.TaskId = taskId;
+            return PartialView("_CreateComment", viewModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [AutoValidateAntiforgeryToken]
+        [Route("task/comment")]
+        public async Task<IActionResult> CreateComment(WorkTaskCommentCreateVM viewModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var currentUser = await _userManager.GetUserAsync(User);
+                    if (currentUser is null)
+                        return RedirectToAction("Login", "Account");
+
+                    var comment = _mapper.Map<WorkTaskComment>(viewModel);
+                    comment.UserId = currentUser.Id;
+
+                    await _workTaskCommentsRepository.CreateAsync(comment);
+                    _logger.LogInformation("Comment with Id:{@CommentId} was create for task with Id:{@TaskId}", comment.Id, comment.TaskId);
+                    return RedirectToAction("Index", "Task", new { id = viewModel.TaskId });
                 }
                 //var statuses = await _workTaskStatusesRepository.GetAllAsync();
                 //ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);

@@ -19,9 +19,9 @@ namespace TaskManager.ViewModels
         public WorkTaskStatusGetVM Status { get; set; }
         public string Author { get; set; }
 
-        public string CreatedDateTimeUTC { get; set; }
-        public string ClosedDateTimeUTC { get; set; }
-        public string PlannedDateTimeUTC { get; set; }
+        public string CreatedDateTime { get; set; }
+        public string ClosedDateTime { get; set; }
+        public string PlannedDateTime { get; set; }
         public string FactedTimeSpan { get; set; }
     }
 

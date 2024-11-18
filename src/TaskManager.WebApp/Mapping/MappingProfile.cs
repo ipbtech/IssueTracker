@@ -18,9 +18,9 @@ namespace TaskManager.WebApp.Mapping
 
 
             CreateMap<WorkTaskView, WorkTaskTableGetVM>()
-                .ForMember(dto => dto.CreatedDateTimeUTC, opt => opt.MapFrom(src => src.CreatedDateTimeUTC.ToShortDateString()))
-                .ForMember(dto => dto.ClosedDateTimeUTC, opt =>
-                    opt.MapFrom(src => src.ClosedDateTimeUTC.HasValue ? src.ClosedDateTimeUTC.Value.ToShortDateString() : "Not closed yet"))
+                .ForMember(dto => dto.CreatedDateTime, opt => opt.MapFrom(src => src.CreatedDateTimeUTC.ToLocalTime().ToShortDateString()))
+                .ForMember(dto => dto.ClosedDateTime, opt =>
+                    opt.MapFrom(src => src.ClosedDateTimeUTC.HasValue ? src.ClosedDateTimeUTC.Value.ToLocalTime().ToShortDateString() : "Not closed yet"))
                 .ForMember(dto => dto.FactedTimeSpan, opt =>
                     opt.MapFrom(src => src.FactedTimeSpan.HasValue ? src.FactedTimeSpan.Value.TotalHours.ToString("0.00") : "-"));
 
@@ -28,11 +28,11 @@ namespace TaskManager.WebApp.Mapping
             CreateMap<WorkTask, WorkTaskGetVM>()
                 .ForMember(dto => dto.Title, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dto => dto.Author, opt => opt.MapFrom(src => src.User.UserName))
-                .ForMember(dto => dto.CreatedDateTimeUTC, opt => opt.MapFrom(src => src.CreatedDateTimeUTC.ToShortDateString()))
-                .ForMember(dto => dto.ClosedDateTimeUTC, opt =>
-                    opt.MapFrom(src => src.ClosedDateTimeUTC.HasValue ? src.ClosedDateTimeUTC.Value.ToShortDateString() : "Not closed"))
-                .ForMember(dto => dto.PlannedDateTimeUTC, opt =>
-                    opt.MapFrom(src => src.PlannedDateTimeUTC.HasValue ? src.PlannedDateTimeUTC.Value.ToShortDateString() : "Not assigned"))
+                .ForMember(dto => dto.CreatedDateTime, opt => opt.MapFrom(src => src.CreatedDateTimeUTC.ToLocalTime().ToShortDateString()))
+                .ForMember(dto => dto.ClosedDateTime, opt =>
+                    opt.MapFrom(src => src.ClosedDateTimeUTC.HasValue ? src.ClosedDateTimeUTC.Value.ToLocalTime().ToShortDateString() : "Not closed"))
+                .ForMember(dto => dto.PlannedDateTime, opt =>
+                    opt.MapFrom(src => src.PlannedDateTimeUTC.HasValue ? src.PlannedDateTimeUTC.Value.ToLocalTime().ToShortDateString() : "Not assigned"))
                 .ForMember(dto => dto.FactedTimeSpan, opt =>
                     opt.MapFrom(src => src.FactedTimeSpan.HasValue ? src.FactedTimeSpan.Value.TotalHours.ToString("0.00") : "Not assigned"));
 
@@ -58,6 +58,12 @@ namespace TaskManager.WebApp.Mapping
                     opt.MapFrom(dto => dto.PlannedDateTime.HasValue ? dto.PlannedDateTime.Value.ToUniversalTime() : new Nullable<DateTime>()))
                 .ForMember(task => task.FactedTimeSpan, opt =>
                     opt.MapFrom(dto => dto.FactedTimeSpan.HasValue ? TimeSpan.FromHours((double)dto.FactedTimeSpan) : new Nullable<TimeSpan>()));
+
+            CreateMap<WorkTaskCommentCreateVM, WorkTaskComment>();
+            CreateMap<WorkTaskComment, WorkTaskCommentGetVM>()
+                .ForMember(dto => dto.CreatedDateTime, opt => opt.MapFrom(src => 
+                    string.Join(" ", src.CreatedDateTimeUTC.ToLocalTime().ToLongDateString(), src.CreatedDateTimeUTC.ToLocalTime().ToLongTimeString())))
+                .ForMember(dto => dto.UserName, opt => opt.MapFrom(src => src.User.UserName));
         }
     }
 }
