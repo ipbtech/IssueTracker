@@ -17,8 +17,9 @@
         <td></td>
         <td></td>
         <td style="display:flex; justify-content:center">
-            <button class="btn btn-primary" hx-get="/?page=@ViewData["NextPage"]" 
-                hx-push-url="true" hx-target="#loading-frame" hx-swap="outerHTML">Load More
+            <button id="load-more-btn" name="load-more" page="@ViewData["NextPage"]" class="btn btn-primary" hx-get="/" hx-vals=""
+                    hx-target="#loading-frame" hx-swap="outerHTML" onclick="prepareQueryParams(this)">
+                Load More
             </button>
         </td>
         <td></td>

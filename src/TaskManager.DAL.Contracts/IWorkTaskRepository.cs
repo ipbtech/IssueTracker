@@ -5,6 +5,6 @@ namespace TaskManager.DAL.Contracts
 {
     public interface IWorkTaskRepository : IRepository<WorkTask>
     {
-        public Task<IEnumerable<WorkTaskView>> GetWorkTaskTableViewsAsync(int count, int page, int sortType);
+        public Task<IEnumerable<WorkTaskView>> GetWorkTaskTableViewsAsync(int count, int page, int sortType, int? userFilter, int? statusFilter);
     }
 }

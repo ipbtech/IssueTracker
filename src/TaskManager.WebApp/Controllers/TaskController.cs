@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
 using TaskManager.DAL.Contracts;
 using TaskManager.Entities;
 using TaskManager.ViewModels;
@@ -41,9 +40,7 @@ namespace TaskManager.WebApp.Controllers
         {
             try
             {
-                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id, 
-                    task => task.Status, task => task.User);
-                if (task is null)
+                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id, task => task.Status, task => task.User) ??
                     throw new Exception($"Task with Id:{id} not found");
 
                 var comments = await _workTaskCommentsRepository.GetAsync(com => com.TaskId == id, com => com.User);
@@ -66,7 +63,7 @@ namespace TaskManager.WebApp.Controllers
         public IActionResult Create()
         {
             var viewModel = new WorkTaskCreateVM();
-            return PartialView("_Create", viewModel);
+            return PartialView("_CreateTask", viewModel);
         }
 
 
@@ -83,18 +80,18 @@ namespace TaskManager.WebApp.Controllers
                     if (currentUser is null)
                         return RedirectToAction("Login", "Account");
 
-                    var createdStatus = await _workTaskStatusesRepository.GetFirstAsync(task => task.Name == "Created");
+                    var createdStatus = await _workTaskStatusesRepository.GetFirstAsync(task => task.Name == "Created") ??
+                        throw new NullReferenceException("Created status is not found");
+
                     var task = _mapper.Map<WorkTask>(viewModel);
                     task.StatusId = createdStatus.Id;
                     task.UserId = currentUser.Id;
 
                     await _workTaskRepository.CreateAsync(task);
                     _logger.LogInformation("Task with Id:{@TaskId} was created", task.Id);
-                    //TempData["CreatedTaskNotification"] = " • Task was created successful. One more time?";
-                    //return RedirectToAction("Create");
-                    return RedirectToAction("Index", "Home");
+                    return Json(new { redirectUrl = Url.Action("Index", "Home") });
                 }
-                return PartialView("_Create", viewModel); //TODO
+                return PartialView("_CreateTask", viewModel);
             }
             catch (Exception ex)
             {
@@ -109,8 +106,7 @@ namespace TaskManager.WebApp.Controllers
         {
             try
             {
-                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id);
-                if (task is null)
+                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id) ??
                     throw new Exception($"Task with Id:{id} not found");
 
                 await _workTaskRepository.DeleteAsync(task);
@@ -131,14 +127,13 @@ namespace TaskManager.WebApp.Controllers
         {
             try
             {
-                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id);
-                if (task is null)
+                var task = await _workTaskRepository.GetFirstAsync(task => task.Id == id) ??
                     throw new Exception($"Task with Id:{id} not found");
 
                 var statuses = await _workTaskStatusesRepository.GetAllAsync();
                 var viewModel = _mapper.Map<WorkTaskUpdateVM>(task);
                 ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);
-                return PartialView("_Update", viewModel);
+                return PartialView("_UpdateTask", viewModel);
             }
             catch (Exception ex)
             {
@@ -155,18 +150,25 @@ namespace TaskManager.WebApp.Controllers
         {
             try
             {
+                var statuses = await _workTaskStatusesRepository.GetAllAsync();
+                ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);
+                var doneStatus = statuses.FirstOrDefault(status => status.Name == "Done") ??
+                    throw new NullReferenceException("Done status is not found");
+
                 if (ModelState.IsValid)
                 {
-                    var task = await _workTaskRepository.GetFirstAsync(task => task.Id == viewModel.Id);
+                    var task = await _workTaskRepository.GetFirstAsync(task => task.Id == viewModel.Id) ??
+                        throw new NullReferenceException("Done status is not found");
+
                     _mapper.Map(viewModel, task);
+                    if (doneStatus.Id == viewModel.StatusId)
+                        task.ClosedDateTimeUTC = DateTime.UtcNow;
 
                     await _workTaskRepository.UpdateAsync(task);
                     _logger.LogInformation("Task with Id:{@TaskId} was updated", task.Id);
-                    return RedirectToAction("Index", "Task", new { id = viewModel.Id });
+                    return Json(new { redirectUrl = Url.Action("Index", "Task", new { id = viewModel.Id }) });
                 }
-                //var statuses = await _workTaskStatusesRepository.GetAllAsync();
-                //ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);
-                return PartialView("_Update", viewModel); //TODO
+                return PartialView("_UpdateTask", viewModel);
             }
             catch (Exception ex)
             {
@@ -174,6 +176,7 @@ namespace TaskManager.WebApp.Controllers
                 return View("Error");
             }
         }
+
 
         [HttpGet]
         [Authorize]
@@ -185,9 +188,10 @@ namespace TaskManager.WebApp.Controllers
             return PartialView("_CreateComment", viewModel);
         }
 
+
         [HttpPost]
         [Authorize]
-        [AutoValidateAntiforgeryToken]
+        [ValidateAntiForgeryToken]
         [Route("task/comment")]
         public async Task<IActionResult> CreateComment(WorkTaskCommentCreateVM viewModel)
         {
@@ -204,11 +208,9 @@ namespace TaskManager.WebApp.Controllers
 
                     await _workTaskCommentsRepository.CreateAsync(comment);
                     _logger.LogInformation("Comment with Id:{@CommentId} was create for task with Id:{@TaskId}", comment.Id, comment.TaskId);
-                    return RedirectToAction("Index", "Task", new { id = viewModel.TaskId });
+                    return Json(new { redirectUrl = Url.Action("Index", "Task", new { id = viewModel.TaskId }) });
                 }
-                //var statuses = await _workTaskStatusesRepository.GetAllAsync();
-                //ViewData["Statuses"] = _mapper.Map<IEnumerable<WorkTaskStatusGetVM>>(statuses);
-                return PartialView("_Update", viewModel); //TODO
+                return PartialView("_CreateComment", viewModel);
             }
             catch (Exception ex)
             {

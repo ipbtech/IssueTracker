@@ -30,12 +30,10 @@ namespace TaskManager.WebApp.Controllers
             _logger = logger;
         }
 
-        // sorting недавно созданные, давно созданные
-        // filters по пользователю, по статусу
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Index(int page, int sort, string[] user, string[] status)
+        public async Task<IActionResult> Index(int? page, int? sort, int? user, int? status)
         {
             try
             {
@@ -43,11 +41,12 @@ namespace TaskManager.WebApp.Controllers
                 if (currentUser is null)
                     return RedirectToAction("Login", "Account");
 
-                page = page == 0 ? 1 : page;
-                ViewData["NextPage"] = page + 1;
-                var tasks = await _workTaskRepository.GetWorkTaskTableViewsAsync(LOADING_COUNT, page, sort);
-                var viewModels = _mapper.Map<IEnumerable<WorkTaskTableGetVM>>(tasks);
+                int pageReq = page is null || page == 0 ? 1 : (int)page;
+                int sortReq = sort is null ? 0 : (int)sort;
+                ViewData["NextPage"] = pageReq + 1;
 
+                var tasks = await _workTaskRepository.GetWorkTaskTableViewsAsync(LOADING_COUNT, pageReq, sortReq, user, status);
+                var viewModels = _mapper.Map<IEnumerable<WorkTaskTableGetVM>>(tasks);
                 if (Request.IsHtmx())
                     return PartialView("_TableRows", viewModels);
 

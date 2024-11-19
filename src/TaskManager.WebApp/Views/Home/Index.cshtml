@@ -8,7 +8,7 @@
 </div>
 <div class="table-responsive-sm">
     <div style="display:flex; flex-direction:row-reverse">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"
+        <button id="create-btn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal"
                 hx-get="/task/create" hx-swap="innerHTML" hx-target="#create-task-content">
             Create task
         </button>
@@ -17,16 +17,18 @@
         <div style="display:flex; flex-direction:row; align-items:center">
             <p style="margin-right:10px; margin-bottom: 0px;"><strong>Filtering:</strong></p>
             <p style="margin-right:10px; margin-bottom: 0px;">By&nbsp;Username:</p>
-            <select class="form-select" style="margin-right:20px;">
-                <option selected>Not</option>
+            <select class="form-select" style="margin-right:20px;" name="user" hx-get="/" hx-vals=""
+                hx-target="#table-content" onchange="prepareQueryParams(this)">
+                <option value="Not" selected>Not</option>
                 @foreach (var user in ViewData["Users"] as IEnumerable<UserGetVM>)
                 {
                     <option value="@user.Id">@user.UserName</option>
                 }
             </select>
             <p style="margin-right:10px; margin-bottom: 0px;">By&nbsp;Status:</p>
-            <select class="form-select" style="margin-right:20px;">
-                <option selected>Not</option>
+            <select class="form-select" style="margin-right:20px;" name="status" hx-get="/" hx-vals=""
+                hx-target="#table-content" onchange="prepareQueryParams(this)">
+                <option value="Not" selected>Not</option>
                 @foreach (var status in ViewData["Statuses"] as IEnumerable<WorkTaskStatusGetVM>)
                 {
                     <option value="@status.Id">@status.Name</option>
@@ -35,7 +37,8 @@
         </div>
         <div style="display:flex; flex-direction:row; align-items:center">
             <p style="margin-right:10px; margin-bottom: 0px;"><strong>Sorting:</strong></p>
-            <select class="form-select">
+            <select class="form-select" name="sort" hx-get="/" hx-vals="" 
+                hx-target="#table-content" onchange="prepareQueryParams(this)">
                 <option selected value="0">Newer</option>
                 <option value="1">Older</option>
             </select>
@@ -53,7 +56,7 @@
                 <th scope="col">WorkHours</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table-content">
             @{
                 await Html.RenderPartialAsync("_TableRows", Model);
             }
@@ -63,7 +66,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -85,42 +88,53 @@
 
 
 @section Scripts {
-    @* <script>
-        window.addEventListener('htmx:beforeRequest', (e) => {
-            let urlObj = new URL(window.location.href);
-            let page = urlObj.searchParams.get('page');
-
-            if (page) {
-                page = parseInt(page) + 1;
-                urlObj.searchParams.set('page', page);
-            } else {
-                urlObj.searchParams.set('page', 2);
-            }
-            //debugger;
-            window.history.pushState({}, '', urlObj.toString());
-            let query = "/?" + urlObj.searchParams.toString();
-            e.detail.elt.setAttribute('hx-get', query);
-            console.log(e.detail.elt);
-        });
-
-    </script> *@
     <script>
-        function dynamicLoadingParameters(el) {
-            let urlObj = new URL(window.location.href);
-            let page = urlObj.searchParams.get('page');
+        function prepareQueryParams(el) {
+            let sortSelect = document.getElementsByName('sort')[0];
+            let statusFilterSelect = document.getElementsByName('status')[0];
+            let userFilterSelect = document.getElementsByName('user')[0];
+            let loadMoreBtn = document.getElementsByName('load-more')[0];
 
-            if (page) {
-                page = parseInt(page) + 1;
-                urlObj.searchParams.set('page', page);
+            let params = {}
+            //debugger;
+            if (el.id == "load-more-btn") {
+                params["page"] = loadMoreBtn.getAttribute('page');
             } else {
-                urlObj.searchParams.set('page', 2);
+                params["page"] = 1;
             }
+            params["sort"] = getParam(sortSelect);
+            params["status"] = getParam(statusFilterSelect);
+            params["user"] = getParam(userFilterSelect);
 
-            let query = "/?" + urlObj.searchParams.toString();
-            console.log(query);
+            console.log(params);
+            //var values = [page, sort, myStatus, user].filter(s => s);
+            el.setAttribute("hx-vals", JSON.stringify(params));
+        };
 
-            el.setAttribute('hx-get', query);
-            window.history.pushState({}, '', urlObj.toString());
-        }
+        function getParam(selectElement) {
+            for (var i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].selected) {
+                    opt = selectElement.options[i].value;
+                    if (opt != "Not") {
+                        return opt;
+                    }
+                }
+            }
+        };
+    </script>
+    <script>
+        document.body.addEventListener('htmx:afterRequest', function (e) {
+            if (e.target.id == 'create-task-content') {
+                try {
+                    let responce = JSON.parse(e.detail.xhr.response);
+                    let value = responce.redirectUrl;
+                    if (value) {
+                        window.location.href = value;
+                    }
+                } catch {
+                    console.log("Responce is not json");
+                }
+            }
+        });
     </script>
 }
