@@ -16,7 +16,8 @@ namespace TaskManager.DAL.Impl
             if (!Database.CanConnect())
                 throw new Exception("Couldn't connect to the database");
 
-            if (Database.GetPendingMigrations().Any())
+            var connStr = Database.GetConnectionString();
+            if (connStr != "Filename=:memory:" && Database.GetPendingMigrations().Any())
                 Database.Migrate();
         }
 
