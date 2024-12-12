@@ -1,0 +1,29 @@
+﻿@model IEnumerable<IssueTableRowVM>
+
+@if(Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><a asp-controller="issue" asp-action="index" asp-route-id="@item.Id">@item.Title</a></td>
+            <td>@item.Status</td>
+            <td>@item.Author</td>
+            <td>@item.CreatedDateTime</td>
+            <td>@item.ClosedDateTime</td>
+            <td>@item.FactedTimeSpan</td>
+        </tr>
+    }
+    <tr id="loading-frame">
+        <td></td>
+        <td></td>
+        <td style="display:flex; justify-content:center">
+            <button id="load-more-btn" name="load-more" page="@ViewData["NextPage"]" class="btn btn-primary" hx-get="/" hx-vals=""
+                    hx-target="#loading-frame" hx-swap="outerHTML" onclick="prepareQueryParams(this)">
+                Load More
+            </button>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+}

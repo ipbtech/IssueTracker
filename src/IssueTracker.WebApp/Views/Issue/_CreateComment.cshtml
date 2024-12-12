@@ -1,0 +1,18 @@
+﻿@model CommentCreateVM
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="add-comment-form" method="post" hx-post="/issue/comment/@Model.IssueId" hx-target="#add-comment">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label hidden asp-for="IssueId"></label>
+                <input hidden asp-for="IssueId" value="@Model.IssueId" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Content">Comment</label>
+                <textarea asp-for="Content" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+</div>
