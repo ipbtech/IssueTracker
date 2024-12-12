@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 
-namespace TaskManager.Tests.FakeAuth
+namespace IssueTracker.Tests.FakeAuth
 {
     public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {

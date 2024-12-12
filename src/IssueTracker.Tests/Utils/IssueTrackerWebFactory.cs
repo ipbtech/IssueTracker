@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using IssueTracker.DAL.Impl;
+using IssueTracker.Entities;
+using IssueTracker.Tests.FakeAuth;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using TaskManager.DAL.Impl;
-using TaskManager.Entities;
-using TaskManager.Tests.FakeAuth;
 
-namespace TaskManager.Tests.Utils
+namespace IssueTracker.Tests.Utils
 {
-    public class TaskManagerWebFactory : WebApplicationFactory<Program>, IDisposable
+    public class IssueTrackerWebFactory : WebApplicationFactory<Program>, IDisposable
     {
         private SqliteConnection _connection;
 
@@ -19,11 +19,11 @@ namespace TaskManager.Tests.Utils
         {
             builder.ConfigureServices(services =>
             {
-                services.RemoveAll<DbContextOptions<TaskManagerDbContext>>();
+                services.RemoveAll<DbContextOptions<IssueTrackerDbContext>>();
 
                 _connection = new SqliteConnection("Filename=:memory:");
                 _connection.Open();
-                services.AddDbContextPool<TaskManagerDbContext>(opt => opt.UseSqlite(_connection));
+                services.AddDbContextPool<IssueTrackerDbContext>(opt => opt.UseSqlite(_connection));
                 services.FillDbTestData();
 
                 services.AddAntiforgery(t =>
@@ -49,7 +49,7 @@ namespace TaskManager.Tests.Utils
             using (var scope = services.BuildServiceProvider())
             {
                 var userManager = scope.GetRequiredService<UserManager<User>>();
-                var dbContext = scope.GetRequiredService<TaskManagerDbContext>();
+                var dbContext = scope.GetRequiredService<IssueTrackerDbContext>();
                 dbContext.Database.EnsureCreated();
 
                 var testUser = FakeUser.TestUser;

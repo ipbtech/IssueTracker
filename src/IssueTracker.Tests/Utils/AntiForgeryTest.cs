@@ -1,7 +1,7 @@
 ﻿using Microsoft.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
-namespace TaskManager.Tests.Utils
+namespace IssueTracker.Tests.Utils
 {
     internal static class AntiForgeryTest
     {

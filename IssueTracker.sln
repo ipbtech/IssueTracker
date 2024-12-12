@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "persistence", "persistence"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BFA0074C-F41E-467D-AB69-F2C3BB806D6B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IssueTracker.Tests", "src\TaskManager.Tests\IssueTracker.Tests.csproj", "{C5E5E846-952B-4164-9515-C660E1841ADA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Entities", "src\IssueTracker.Entities\IssueTracker.Entities.csproj", "{E414F022-F7F9-420A-AD85-4CED5C9204D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.DAL.Contracts", "src\IssueTracker.DAL.Contracts\IssueTracker.DAL.Contracts.csproj", "{8DC29527-673F-4E16-93D7-A6E8245872D0}"
@@ -23,16 +21,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.DAL.Impl", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.WebApp", "src\IssueTracker.WebApp\IssueTracker.WebApp.csproj", "{A4C3928C-D913-4C95-A615-0763946172B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IssueTracker.Tests", "src\IssueTracker.Tests\IssueTracker.Tests.csproj", "{89165D5A-13EC-456D-BDC9-BAA8C830FBC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C5E5E846-952B-4164-9515-C660E1841ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5E5E846-952B-4164-9515-C660E1841ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C5E5E846-952B-4164-9515-C660E1841ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C5E5E846-952B-4164-9515-C660E1841ADA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E414F022-F7F9-420A-AD85-4CED5C9204D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E414F022-F7F9-420A-AD85-4CED5C9204D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E414F022-F7F9-420A-AD85-4CED5C9204D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,17 +49,21 @@ Global
 		{A4C3928C-D913-4C95-A615-0763946172B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4C3928C-D913-4C95-A615-0763946172B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4C3928C-D913-4C95-A615-0763946172B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89165D5A-13EC-456D-BDC9-BAA8C830FBC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89165D5A-13EC-456D-BDC9-BAA8C830FBC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89165D5A-13EC-456D-BDC9-BAA8C830FBC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89165D5A-13EC-456D-BDC9-BAA8C830FBC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C5E5E846-952B-4164-9515-C660E1841ADA} = {BFA0074C-F41E-467D-AB69-F2C3BB806D6B}
 		{E414F022-F7F9-420A-AD85-4CED5C9204D2} = {81BA778C-88FF-4B5D-B2BF-616E576833C6}
 		{8DC29527-673F-4E16-93D7-A6E8245872D0} = {81BA778C-88FF-4B5D-B2BF-616E576833C6}
 		{9474E7C4-2BD8-460B-B045-4404E16222F8} = {6B811DF6-1501-49CF-9A91-6CC7EC1739E0}
 		{7F86CF65-4EFE-4AC7-8FF9-79281E34A102} = {E962A128-FEE0-4B83-9BA1-14704B859A7B}
 		{A4C3928C-D913-4C95-A615-0763946172B3} = {6B811DF6-1501-49CF-9A91-6CC7EC1739E0}
+		{89165D5A-13EC-456D-BDC9-BAA8C830FBC3} = {BFA0074C-F41E-467D-AB69-F2C3BB806D6B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {97EEE455-D622-451C-BA7E-44950AA553E7}

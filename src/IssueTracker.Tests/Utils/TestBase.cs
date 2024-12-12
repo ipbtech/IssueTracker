@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using IssueTracker.Tests.FakeAuth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using TaskManager.Tests.FakeAuth;
 
-namespace TaskManager.Tests.Utils
+namespace IssueTracker.Tests.Utils
 {
-    public abstract class TestBase : IClassFixture<TaskManagerWebFactory>
+    public abstract class TestBase : IClassFixture<IssueTrackerWebFactory>
     {
         protected readonly HttpClient unauthHttpClient;
         protected readonly HttpClient authHttpClient;
         private const string _basePath = "http://localhost:5207";
 
-        public TestBase(TaskManagerWebFactory factory)
+        public TestBase(IssueTrackerWebFactory factory)
         {
             unauthHttpClient = factory.CreateClient(new WebApplicationFactoryClientOptions
             {

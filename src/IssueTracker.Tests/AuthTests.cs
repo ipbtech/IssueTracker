@@ -1,13 +1,13 @@
-﻿using Microsoft.Net.Http.Headers;
+﻿using IssueTracker.Tests.FakeAuth;
+using IssueTracker.Tests.Utils;
+using Microsoft.Net.Http.Headers;
 using System.Net;
-using TaskManager.Tests.FakeAuth;
-using TaskManager.Tests.Utils;
 
-namespace TaskManager.Tests
+namespace IssueTracker.Tests
 {
     public class AuthTests : TestBase
     {
-        public AuthTests(TaskManagerWebFactory factory) : base(factory)
+        public AuthTests(IssueTrackerWebFactory factory) : base(factory)
         { }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace TaskManager.Tests
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Contains("Something wrong", responseString);
+            Assert.Contains("Email or password is not valid", responseString);
             Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType.ToString());
         }
 

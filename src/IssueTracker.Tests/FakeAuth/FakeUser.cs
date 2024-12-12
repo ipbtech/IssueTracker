@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using TaskManager.Entities;
+﻿using IssueTracker.Entities;
+using Microsoft.AspNetCore.Identity;
 
-namespace TaskManager.Tests.FakeAuth
+namespace IssueTracker.Tests.FakeAuth
 {
     internal static class FakeUser
     {

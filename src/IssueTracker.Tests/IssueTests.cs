@@ -1,12 +1,12 @@
-﻿using System.Net;
-using TaskManager.Tests.FakeAuth;
-using TaskManager.Tests.Utils;
+﻿using IssueTracker.Tests.FakeAuth;
+using IssueTracker.Tests.Utils;
+using System.Net;
 
-namespace TaskManager.Tests
+namespace IssueTracker.Tests
 {
-    public class WorkTaskTests : TestBase
+    public class IssueTests : TestBase
     {
-        public WorkTaskTests(TaskManagerWebFactory factory) : base(factory)
+        public IssueTests(IssueTrackerWebFactory factory) : base(factory)
         { }
 
         [Fact]
