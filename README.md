@@ -6,7 +6,7 @@ ASP.NET MVC & HTMX interaction
 2. ASP.NET MVC
 3. ASP.NET Identity (cookie auth)
 4. HTMX
-5. HTML/CSS (Bootstrap)
+5. Javascript, HTML/CSS (Bootstrap)
 6. SQLite
 7. EntityFramework Core
 8. Bogus
