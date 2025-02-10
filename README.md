@@ -22,7 +22,7 @@ ASP.NET MVC & HTMX interaction
 
 **Creating new issues, updating and deleting your issues**
 
-
+## A little bit of pictures
 ![image](https://github.com/user-attachments/assets/7ed3b264-76e1-4133-86da-2c80088fc76a)
 
 ![image](https://github.com/user-attachments/assets/2f880c6e-9507-4412-8063-fa21e52dd721)
