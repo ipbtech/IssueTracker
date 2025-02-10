@@ -4,12 +4,12 @@ ASP.NET MVC & HTMX interaction
 ## Technologies
 1. NET8
 2. ASP.NET MVC
-3. ASP.NET Identity (cookie auth)
-4. HTMX
-5. Javascript, HTML/CSS (Bootstrap)
-6. SQLite
-7. EntityFramework Core
-8. Bogus
+3. HTMX
+4. Javascript, HTML/CSS (Bootstrap)
+5. ASP.NET Identity for simple cookie-based authentification
+6. SQLite for persistence data
+7. EntityFramework Core for data access with custom generic repositories
+8. Bogus for generating fake data
 9. Automapper
 10. xUnit integration tests
 
